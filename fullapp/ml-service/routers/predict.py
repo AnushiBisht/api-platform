@@ -17,7 +17,8 @@ class PredictRequest(BaseModel):
     text: str
 
 
-def verify_token(authorization: str | None):
+from typing import Optional
+def verify_token(authorization: Optional[str]):
     if not authorization:
         raise HTTPException(status_code=401, detail="Missing Authorization header")
     token = authorization.replace("Bearer ", "").strip()
@@ -30,7 +31,7 @@ def verify_token(authorization: str | None):
 
 
 @router.post("/predict")
-async def predict(body: PredictRequest, authorization: str = Header(None)):
+async def predict(body: PredictRequest, authorization: Optional[str] = Header(None)):
     verify_token(authorization)
 
     text = body.text.strip()
